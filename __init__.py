@@ -11,12 +11,12 @@ def init(cbpi):
     for key, fermenter in cbpi.cache.get("fermenter").iteritems():
         # for fermenters that share actors, only set the first to auto
         if (fermenter.heater not in equipment) and (fermenter.cooler not in equipment):
-            if fermenter.heater is not None:
+            if fermenter.heater:
                 equipment.append(fermenter.heater)
-            if fermenter.cooler is not None:
+            if fermenter.cooler:
                 equipment.append(fermenter.cooler)
             # restart controller if stopped
-            if fermenter.state is False:
+            if (fermenter.state is False) and (fermenter.logic):
                 cbpi.app.logger.info("StartupNotify: restarting auto mode for '{}'".format(fermenter.name))
                 cfg = fermenter.config.copy()
                 cfg.update(dict(api=cbpi, fermenter_id=fermenter.id, heater=fermenter.heater, sensor=fermenter.sensor))
